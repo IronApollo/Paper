@@ -1,8 +1,7 @@
-From 8231f2ff813a9f51a3e0c46f7e76a561a1452766 Mon Sep 17 00:00:00 2001
+From 719bde6e43990f16c50c982b9c8758329976d67c Mon Sep 17 00:00:00 2001
 From: BuildTools <unconfigured@null.spigotmc.org>
 Date: Fri, 28 Sep 2018 05:31:02 -0400
-Subject: [PATCH] This change allows server developers to prevent water sources
- from being "seen" by soil blocks.
+Subject: [PATCH] Use BlockSpreadEvent to control soil finding nearby water
 
 
 diff --git a/src/main/java/net/minecraft/server/BlockSoil.java b/src/main/java/net/minecraft/server/BlockSoil.java
