@@ -1,0 +1,36 @@
+From 8231f2ff813a9f51a3e0c46f7e76a561a1452766 Mon Sep 17 00:00:00 2001
+From: BuildTools <unconfigured@null.spigotmc.org>
+Date: Fri, 28 Sep 2018 05:31:02 -0400
+Subject: [PATCH] This change allows server developers to prevent water sources
+ from being "seen" by soil blocks.
+
+
+diff --git a/src/main/java/net/minecraft/server/BlockSoil.java b/src/main/java/net/minecraft/server/BlockSoil.java
+index 8560fd2a..860af44e 100644
+--- a/src/main/java/net/minecraft/server/BlockSoil.java
++++ b/src/main/java/net/minecraft/server/BlockSoil.java
+@@ -3,6 +3,7 @@ package net.minecraft.server;
+ import java.util.Iterator;
+ import java.util.Random;
+ 
++import org.bukkit.event.block.BlockSpreadEvent;
+ // CraftBukkit start
+ import org.bukkit.event.entity.EntityInteractEvent;
+ import org.bukkit.craftbukkit.event.CraftEventFactory;
+@@ -120,7 +121,12 @@ public class BlockSoil extends Block {
+ 
+             blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
+         } while (!iworldreader.b(blockposition_mutableblockposition).a(TagsFluid.WATER));
+-
++        //Paper start - allow option to prevent water from being detected within 4 blocks of soil block
++        World world = (World)iworldreader;
++        BlockSpreadEvent event = new BlockSpreadEvent(world.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ()), world.getWorld().getBlockAt(blockposition_mutableblockposition.getX(), blockposition_mutableblockposition.getY(), blockposition_mutableblockposition.getZ()), ((World)iworldreader).getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ()).getState());
++        event.callEvent();
++        if(event.isCancelled()) return false; else
++        //Paper end
+         return true;
+     }
+ 
+-- 
+2.17.0.windows.1
+
